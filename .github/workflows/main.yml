@@ -1,0 +1,22 @@
+name: Build Windows
+on: workflow_dispatch  # 允许手动点按钮触发
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive # 非常重要，拉取子模块
+
+      - name: Configure CMake
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: sensevoice-windows-exe
+          path: build/Release/*.exe
